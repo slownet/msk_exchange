@@ -1,4 +1,4 @@
-from get_name import Stock
+from stock import Stock
 
 if __name__ == "__main__":
     yandex_stock = Stock("YNDX")
