@@ -1,14 +1,8 @@
-import requests
+from get_name import Stock
 
-parameters = {
-    "iss.meta": "off",
-    "iss.only": "securities",
-    "securities.columns": "SECID,PREVADMITTEDQUOTE",
-}
+if __name__ == "__main__":
+    yandex_stock = Stock("YNDX")
+    sber_stock = Stock("SBER")
 
-response = requests.get(
-    "https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.xml",
-    params=parameters
-)
-
-print("a")
+    print(yandex_stock)
+    print(sber_stock)

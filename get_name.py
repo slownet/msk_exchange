@@ -1,7 +1,11 @@
 import requests
 
 
-def do_request(stock_id=None, engine="stock", market="shares", board="TQBR", request_parameters=None):
+def do_request(stock_id: str = None,
+               engine: str = "stock",
+               market: str = "shares",
+               board: str = "TQBR",
+               request_parameters: dict = None) -> dict:
     # create url by template
 
     url = f"https://iss.moex.com/iss/engines/{engine}/markets/{market}/boards/{board}/securities"
@@ -11,7 +15,6 @@ def do_request(stock_id=None, engine="stock", market="shares", board="TQBR", req
         url += f"/{stock_id}.json"
 
     response = requests.get(url, params=request_parameters)
-
     json_data = response.json()
 
     json_parameter = "marketdata"
@@ -27,7 +30,7 @@ def do_request(stock_id=None, engine="stock", market="shares", board="TQBR", req
 
 
 class Stock:
-    def __init__(self, stock_id):
+    def __init__(self, stock_id: str):
         self.stock_id = stock_id
         self.full_stock_name = None
 
@@ -36,10 +39,10 @@ class Stock:
             "marketdata.columns": "SECID,SECNAME,LAST",
         }
 
-    def get_id(self):
+    def get_id(self) -> str:
         return self.stock_id
 
-    def get_price(self):
+    def get_price(self) -> float:
         response_dict = do_request(
             stock_id=self.stock_id,
             request_parameters={
@@ -49,9 +52,9 @@ class Stock:
             }
         )
 
-        return response_dict["LAST"]
+        return float(response_dict["LAST"])
 
-    def get_full_name(self):
+    def get_full_name(self) -> str:
         if self.full_stock_name:
             return self.full_stock_name
 
@@ -66,13 +69,5 @@ class Stock:
 
         return response_dict["SECNAME"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.get_id()} - {self.get_full_name()}: {self.get_price()}"
-
-
-if __name__ == "__main__":
-    yandex_stock = Stock("YNDX")
-    sber_stock = Stock("SBER")
-
-    print(yandex_stock)
-    print(sber_stock)
